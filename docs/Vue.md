@@ -106,7 +106,10 @@
         `
         <div>
             <input v-model="inputValue"/>
-            <button v-on:click="handleAddItem">增加</button>
+             <button
+             v-on:click="handleAddItem"
+             v-bind:title="inputValue"
+             >增加</button>
         <ul>
             <li v-for="item of list">{{item}} test</li>
             <li v-for="(item,index) of list">{{item}}  {{index}} test</li>
@@ -117,6 +120,8 @@
     }).mount('#root');
 </script>
 ```
+> `v-bind:属性='变量'` 可以在标签内部绑定变量，外部直接用{{变量}}
+
 > `v-for= "item of list" ` 将list中的元素循环到item中
 
 >`v-for="(item,index) of list "` 将索引和元素循环到item中
@@ -124,3 +129,60 @@
 >`v-model="inputValue"` 和`<input/>`控件双向绑定，变量`inputValue`改变，控件中的数值也会发生改变。
 
 >`this.list.push(this.inputValue);`向`list`数组添加元素
+
+### 1.5组件概念初探todolist组件代码拆分
+> 组件就是网页的一部分
+
+``` js
+<script>
+  const app =   Vue.createApp({
+        data() {
+            return {
+                inputValue:'',
+                list:[]
+            }
+        },
+        methods:{
+            handleAddItem(){
+                this.list.push(this.inputValue);
+                this.inputValue='';
+            }
+        },
+        template: 
+        `
+        <div>
+            <input v-model="inputValue"/>
+            <button
+             v-on:click="handleAddItem"
+             v-bind:title="inputValue"
+             >增加</button>
+
+        <ul>
+            // 下面app定义的组件 todo-item
+            <todo-item 
+            v-for="(item,index) of list" 
+            v-bind:content="item"
+            v-bind:index="index" />
+            
+        </ul>
+        </div>
+        `
+    });
+    app.component("todo-item",{
+        props:['content','index'],
+        template:'<li>{{index}}--{{content}}</li>'
+    });
+    app.mount("#root");
+</script>
+```
+> `const app = Vue.creatApp()` 创建Vue实例
+
+> ``` js
+> app.component('组件名称',{
+>      props:['组件属性1'，'组件属性2'],
+>      template:'组件内容'
+>      });
+> ```
+
+
+> `app.mount("#root")` 这句要放在创建组件的后面，创建完成之后才可以挂载节点
