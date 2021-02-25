@@ -1,4 +1,5 @@
-## 1.2初学编写hello world
+## 第一章
+### 1.2初学编写hello world
 ``` js
 <script>
     Vue.createApp({
@@ -26,7 +27,7 @@
 
 - `template:`
 > 模板 {{变量}}
-## 1.3编写字符串反转和内容显示隐藏
+### 1.3编写字符串反转和内容显示隐藏
 
 > 内容显示隐藏
 ``` js
@@ -85,7 +86,7 @@
     }).mount('#root');
 </script>
 ```
-## 1-4 编写TodoList 小功能，了解循环和双向绑定
+### 1-4 编写TodoList 小功能，了解循环和双向绑定
 ``` js
 <script>
     Vue.createApp({
