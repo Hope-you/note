@@ -207,3 +207,55 @@
 - 传入的参数表示这个应用最外层的组件，应该如何展示
 - Vue类似于mvvm设计模式
 - vm就是绑定数据和视图的对象，即根组件
+
+### 2.2Vue生命周期函数（1）
+> 生命周期函数: 在某一个时刻会自动执行的函数
+
+``` js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message:'hello world'
+            }
+        },
+        beforeCreate(){
+            console.log("beforeCreate_log");
+        },
+        created(){
+            console.log("created_log");
+        },
+        beforeMount(){
+            console.log("beforeMount_log");
+        },
+        mounted(){
+            console.log("mounted_log")
+        },
+        beforeUpdate(){
+            console.log("beforeUpdate_log")
+        },
+        updated(){
+            console.log("updated_log")
+        },
+        beforeUnmount(){
+            console.log("beforeUnmount_log")
+        },
+        unmounted(){
+            console.log("Unmounted_log")
+        },
+        template:"<div>{{message}}</div>"
+    });
+    const vm = app.mount("#root");
+</script>
+```
+- `beforeCreate(){}` 在实例生成之前自动执行的函数
+- `create(){}` 在实例生成之后自动执行的函数
+- `beforeMount(){}` 在组件内容被渲染到页面之前自动执行的函数
+- `mounted(){}`在组件内容被渲染到页面之前自动执行的函数
+
+### 2.3Vue生命周期函数（2）
+- `beforeUpdate(){}`当data中的数据发生变化时会执行
+- `updated(){}`当data中的数据发生变化之后会执行 
+- `app.unmount()` 让Vue停止接管节点
+- `beforeUnmount(){}` 当Vue失效时，
+- `unMounted(){}`当vue失效之后
