@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.2初学编写hello world</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                content: 'hello world'
+            }
+        },
+        methods:{
+            handleBtnClick(){
+                //split('')打散
+                //reverse()重新排序
+                //join()聚合
+                const newContent=this.content.split('').reverse().join('')
+                this.content=newContent;
+            }
+        },
+        template: 
+        `
+        <div>
+            {{content}}
+            <button v-on:click="handleBtnClick">反转</button>
+        </div>
+        `
+        
+    }).mount('#root');
+</script>
+
+</html>

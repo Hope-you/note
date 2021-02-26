@@ -184,5 +184,26 @@
 >      });
 > ```
 
-
 > `app.mount("#root")` 这句要放在创建组件的后面，创建完成之后才可以挂载节点
+
+
+## 第二章
+### 2.1应用和组件的基本概念
+
+``` js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message:'hello world'
+            }
+        },
+        template:"<div>{{message}}</div>"
+    });
+    const vm = app.mount("#root");
+</script>
+```
+- createApp 表示创建一个 Vue应用，存储在app变量中
+- 传入的参数表示这个应用最外层的组件，应该如何展示
+- Vue类似于mvvm设计模式
+- vm就是绑定数据和视图的对象，即根组件
