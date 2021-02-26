@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2.1应用和组件的基本概念</title>
+    <title>2.4常用模板语法讲解（1）</title>
     <script src="./js/vue.global.js"></script>
 </head>
 
@@ -16,34 +16,19 @@
     const app = Vue.createApp({
         data() {
             return {
-                message:'hello world'
+                message:'<strong>hello world</strong>',
+                disable:true,
+                show:true
             }
         },
-        beforeCreate(){
-            console.log("beforeCreate_log");
-        },
-        created(){
-            console.log("created_log");
-        },
-        beforeMount(){
-            console.log("beforeMount_log");
-        },
-        mounted(){
-            console.log("mounted")
-        },
-        beforeUpdate(){
-            console.log("beforeUpdate_log")
-        },
-        updated(){
-            console.log("updated_log")
-        },
-        beforeUnmount(){
-            console.log("beforeUnmount_log")
-        },
-        Unmounted(){
-            console.log("Unmounted_log")
-        },
-        template:"<div>{{message}}</div>"
+        template:`
+        <div v-html="message"></div>
+        <div v-bind:title="message">你好</div>
+        <input v-bind:disabled="disable" />
+        <div>{{Math.random()}} </div>
+        <div v-once>{{massage}} </div>
+        <div v-if="show">{{message}} </div>
+        `
     });
     const vm = app.mount("#root");
 </script>

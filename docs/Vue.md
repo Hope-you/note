@@ -259,3 +259,35 @@
 - `app.unmount()` 让Vue停止接管节点
 - `beforeUnmount(){}` 当Vue失效时，
 - `unMounted(){}`当vue失效之后
+
+### 2.4常用模板语法讲解(1)
+``` js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message:'<strong>hello world</strong>',
+                disable:true,
+                show:true
+            }
+        },
+        template:`
+        <div v-html="message"></div>
+        <div v-bind:title="message">你好</div>
+        <input v-bind:disabled="disable" />
+        <div>{{Math.random()}} </div>
+        <div v-once>{{massage}} </div>
+        <div v-if="show">{{message}} </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+```
+- `v-html` 让节点中编译message中的html标签
+- `v-bind:title="message"` 让message作为变量而不是字符串给title属性
+- `{{表达式}}` {{}}中可以存放表达式，不可有语句
+  - ps：简单理解表达是有值，语句不总是有值
+- `v-once` 让指定的节点值渲染一次数据内容，数据内容改变时，不会重新渲染
+- `v-if=true/false` 如果为true则节点展示，如果为false则不展示
+
+### 2.5常用模板语法讲解(2)
