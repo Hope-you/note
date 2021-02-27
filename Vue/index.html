@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2.4常用模板语法讲解（1）</title>
+    <title>2.5常用模板语法讲解（2）</title>
     <script src="./js/vue.global.js"></script>
 </head>
 
@@ -16,18 +16,33 @@
     const app = Vue.createApp({
         data() {
             return {
-                message:'<strong>hello world</strong>',
-                disable:true,
-                show:true
+                message: 'hello world',
+                name: 'title',
+                event: 'mouseenter'
             }
         },
-        template:`
-        <div v-html="message"></div>
-        <div v-bind:title="message">你好</div>
-        <input v-bind:disabled="disable" />
-        <div>{{Math.random()}} </div>
-        <div v-once>{{massage}} </div>
-        <div v-if="show">{{message}} </div>
+        methods: {
+            handleClick() {
+                alert("click");
+            }
+        },
+        template: `
+        <div 
+            :[name]="message" 
+            @[event]="handleClick"
+        > 
+            {{message}} 
+        </div>
+
+        <form action="https://baidu.com" @click=handleClick>
+            <button type="submit"> 提交跳转
+            </button>
+        </form>
+
+        <form action="https://baidu.com" @click.prevent=handleClick>
+            <button type="submit"> 提交不跳转
+            </button>
+        </form>
         `
     });
     const vm = app.mount("#root");
