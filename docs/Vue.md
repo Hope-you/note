@@ -336,3 +336,132 @@
 - `@click.prevent=handleClick` 可以更改click的默认事件，上述代码中让按钮不跳转
 
 ### 2.6数据、方法、计算属性和侦听器
+> 在methods中最好不使用箭头函数，箭头函数指向外层函数，this指向的是window
+
+``` js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world',
+                count:1,
+                price:5
+            }
+        },
+        computed:{
+            totle(){
+                return this.count*this.price;
+            }
+        },
+        methods:{
+            handleClick(){
+                console.log("click",this.message);
+            },
+            formatString(string){
+                return string.toUpperCase();
+            },
+            gettotle(){
+                return this.count*this.price;
+            }
+        },
+        template: `
+        <div 
+        @click="handleClick">{{formatString(message)}}
+        </div>
+        <div 
+        @click="handleClick">{{count*price}}
+        </div>
+        <div
+        @click="handleClick"> {{totle}}
+        </div>
+        <div
+        @click="handleClick"> {{gettotle()}}
+        </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+```
+- `computed:{}`当计算属性依赖的内容发生改变的时候，才会重新计算
+- `methods:{}`只要页面重新渲染，才会重新计算
+
+### 2.6数据、方法、计算属性和侦听器(2)
+```js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world',
+                count: 1,
+                price: 5,
+                newTotle:10,
+            }
+        },
+        //监听器
+        watch: {
+            //做一个类似computed计算属性的效果
+            price(current,prev) {
+            this.newTotle=current*this.current;
+            }
+        },
+        computed: {
+            totle() {
+                return this.count * this.price;
+            }
+        },
+    });
+    const vm = app.mount("#root");
+</script>
+```
+- `computed`和`methods`都能实现一个功能，建议使用computed，因为有缓存
+- `computed`和`watcher`都能实现的功能，建议使用computed因为更加简洁
+
+
+## 2.8样式绑定语法
+```js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return { 
+                classString: 'red',
+                classObject:{red:false,green:true},
+                classArray:['red','green',{brown:false}],
+                styleString:'color:yellow;',
+                styleObject:{
+                    color:"orange",
+                    background:'yellow'
+                }
+            }
+        },
+        template: `
+        <div :class="classString">
+            hello world 
+            <demo class="green"/>
+        </div>
+
+        <div :style="styleString">
+            我样式绑定的是一个字符串
+        </div>
+        <div :style="styleObject">
+            我样式绑定的是一个对象
+        </div>
+        
+        `
+    });
+    app.component('demo',{
+        template:`
+         <div :class="$attrs.class">one</div> 
+         <div>two</div> 
+         `
+    })
+    const vm = app.mount("#root");
+</script>
+```
+> 样式绑定有5种，绑定语法可以在上述代码中的`template`中找到
+
+1. `classString:'red'`通过`v-bind`绑定`class`属性来绑定样式
+2. `classObject:{red:false,green:true}`通过类的对象来绑定样式，可以控制哪些样式显示，哪些样式不显示。
+3. `classArray:['red','green',{brown:false}]`通过绑定数组来绑定样式，数组中可以包含对象。
+4. `styleObject:{color:"orange",background:'yellow'}` 绑定数据对象（常用）
+
+## 2.9条件渲染

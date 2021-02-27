@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.6数据、方法、计算属性和侦听器(1)</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world',
+                count:1,
+                price:5
+            }
+        },
+        computed:{
+            totle(){
+                return this.count*this.price;
+            }
+        },
+        methods:{
+            handleClick(){
+                console.log("click",this.message);
+            },
+            formatString(string){
+                return string.toUpperCase();
+            },
+            gettotle(){
+                return this.count*this.price;
+            }
+        },
+        template: `
+        <div 
+        @click="handleClick">{{formatString(message)}}
+        </div>
+        <div 
+        @click="handleClick">{{count*price}}
+        </div>
+        <div
+        @click="handleClick"> {{totle}}
+        </div>
+        <div
+        @click="handleClick"> {{gettotle()}}
+        </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+</html>

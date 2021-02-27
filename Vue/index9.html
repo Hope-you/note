@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.7数据、方法、计算属性和侦听器(2)</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world',
+                count: 1,
+                price: 5,
+                newTotle:10,
+            }
+        },
+        //监听器
+        watch: {
+            //做一个类似computed计算属性的效果
+            price(current,prev) {
+            this.newTotle=current*this.current;
+            }
+        },
+        computed: {
+            totle() {
+                return this.count * this.price;
+            }
+        },
+    });
+    const vm = app.mount("#root");
+</script>
+
+</html>
