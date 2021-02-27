@@ -292,3 +292,45 @@
 - `v-if=true/false` 如果为true则节点展示，如果为false则不展示
 
 ### 2.5常用模板语法讲解(2)
+
+``` js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world',
+                name: 'title',
+                event: 'mouseenter'
+            }
+        },
+        methods: {
+            handleClick() {
+                alert("click");
+            }
+        },
+        template: `
+        <div 
+            :[name]="message" 
+            @[event]="handleClick"
+        > 
+            {{message}} 
+        </div>
+
+        <form action="https://baidu.com" @click=handleClick>
+            <button type="submit"> 提交跳转
+            </button>
+        </form>
+
+        <form action="https://baidu.com" @click.prevent=handleClick>
+            <button type="submit"> 提交不跳转
+            </button>
+        </form>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+```
+#### 动态属性
+- ``<div v-on:click="handleClick" v-bind:title="message"></div>` 可以简写成 `<div @click="handleClick" :title="message"></div>`
+- 在data中定义 `name:'title'` 模板中可以写成 ` :[name]="message"`
+- `@click.prevent=handleClick` 可以更改click的默认事件，上述代码中让按钮不跳转
