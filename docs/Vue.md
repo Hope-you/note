@@ -334,3 +334,5 @@
 - ``<div v-on:click="handleClick" v-bind:title="message"></div>` 可以简写成 `<div @click="handleClick" :title="message"></div>`
 - 在data中定义 `name:'title'` 模板中可以写成 ` :[name]="message"`
 - `@click.prevent=handleClick` 可以更改click的默认事件，上述代码中让按钮不跳转
+
+### 2.6数据、方法、计算属性和侦听器

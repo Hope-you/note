@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2.6数据、方法、计算属性和侦听器(1)</title>
+    <title>2.5常用模板语法讲解（2）</title>
     <script src="./js/vue.global.js"></script>
 </head>
 
@@ -16,11 +16,15 @@
     const app = Vue.createApp({
         data() {
             return {
-                message: 'hello world'
+                message: 'hello world',
+                name: 'title',
+                event: 'mouseenter'
             }
         },
-        methods:{
-            
+        methods: {
+            handleClick() {
+                alert("click");
+            }
         },
         template: `
         <div 
@@ -29,8 +33,19 @@
         > 
             {{message}} 
         </div>
+
+        <form action="https://baidu.com" @click=handleClick>
+            <button type="submit"> 提交跳转
+            </button>
+        </form>
+
+        <form action="https://baidu.com" @click.prevent=handleClick>
+            <button type="submit"> 提交不跳转
+            </button>
+        </form>
         `
     });
     const vm = app.mount("#root");
 </script>
+
 </html>
