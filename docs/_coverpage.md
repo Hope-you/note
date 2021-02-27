@@ -7,4 +7,4 @@
 
 
 [GitHub](https://github.com/Hope-you/note)
-[Get Started](/Vue)
+[Get Started](#笔记)
