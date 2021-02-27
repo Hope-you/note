@@ -417,7 +417,7 @@
 - `computed`和`watcher`都能实现的功能，建议使用computed因为更加简洁
 
 
-## 2.8样式绑定语法
+### 2.8样式绑定语法
 ```js
 <script>
     const app = Vue.createApp({
@@ -464,4 +464,4 @@
 3. `classArray:['red','green',{brown:false}]`通过绑定数组来绑定样式，数组中可以包含对象。
 4. `styleObject:{color:"orange",background:'yellow'}` 绑定数据对象（常用）
 
-## 2.9条件渲染
+### 2.9条件渲染
