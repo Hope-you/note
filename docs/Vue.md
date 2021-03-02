@@ -465,3 +465,113 @@
 4. `styleObject:{color:"orange",background:'yellow'}` 绑定数据对象（常用）
 
 ### 2.9条件渲染
+```js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: false,
+                conditionOne:false,
+                conditionTwo:true,
+            }
+        },
+        template: `
+        <div v-if="show"> Hello World</div>
+
+        <div v-if="conditionOne"> If</div>
+        <div v-else-if="conditionTwo">Else If</div>
+        <div v-else="else"> Else</div>
+
+        <div v-show="show"> Bye World</div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+
+```
+1. `v-if="conditionOne"`去除DOM元素达到隐藏节点的效果
+2. `v-else="else"` 如果`conditionOne`是true则渲染If，反之则渲染Else
+3. `v-else-if="conditionTwo"` 如果`conditionOne`为false，`conditionTwo`为true，则会渲染Else If,两者都为false则会渲染Else
+4. `v-show` 通过改变样式`style="display: none;"`来隐藏节点
+
+### 2.10-2.11列表循环渲染（1-2）
+```js
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                listArray: ['dell', 'lee', 'teacher'],
+                listObject: {
+                    firstName: 'dell',
+                    lastName: 'lee',
+                    job: 'teacher'
+                },
+            }
+        },
+        methods:{
+            handleAddBtnClick(){
+                // this.listArray.push("hello")
+                // this.listArray.pop()
+                // this.listArray.shift()
+                // this.listArray.unshift('hello')
+                // this.listArray.reverse()
+                // this.listArray=['bye','world']
+                // this.listArray=['bye'].concat(['world'])
+                // this.listArray=['bye','world'].filter(item => item==='bye') //滤出元素为bye的元素
+                // this.listArray[1]='hello'
+
+                this.listObject.age=100;
+                this.listObject.sex="male";
+            }
+        },
+        template: `
+        <div>
+            <div v-for="(item,index) in listArray" :key="index">
+            {{item}}---{{index}}
+            </div>
+            
+
+            <div
+             v-for="(value,key,index) in listObject" 
+             :key="index"
+             v-if="key !=='lastName'" //不起作用
+            >
+            {{value}}---{{key}}
+            </div>
+
+
+            <template
+             v-for="(value,key,index) in listObject" 
+             :key="index"
+            >
+            
+            <div v-if="key !=='lastName'">  
+            //把v-if放在单独的div中，来进行判断
+                {{value}}---{{key}}
+            </div>
+
+            </template>
+
+            <button @click="handleAddBtnClick" >新增</button>
+        </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+```
+1. 使用`v-for`渲染列表的时候，一般会在节点上加上`:key="index"`唯一的值，这样在添加、减少数值时Vue就不会重新渲染前面未做更改的节点
+2. 更改列表数据：
+    1. 使用数组的变更函数
+        1. `this.listArray.push('123')`:在数组的末端加上数据
+        2. `this.listArray.pop()`：从数组的末端删除数据
+        3. `this.listArray.shift()`：从数组的前端删除数据
+        4. `this.listArray.unshift('hello')`从数组的前端添加数据
+        5. `this.listArray.reverse()`:将数组的元素反向1234->4321
+    2. 直接改变数组
+        1. `this.listArray=['bye','world']`直接替换掉原有数组
+        2. `this.listArray=['bye'].concat(['world'])` 用concat方法连接多个数组
+        3. `this.listArray=['bye','world'].filter(item => item==='bye')` 滤除数组中为数值为bye的元素
+    3. 直接更改数组的内容
+        1. `this.listArray[1]='hello'`改变数组中具体的某个元素
+3. 更改对象的内容：`this.listObject.sex=male;`直接添加一个属性
+4. 渲染对象的时候，如果不想要渲染某个属性/字段可以用下面的`template`标签类似于一个占位符，在DOM不渲染，因为`v-for`的优先级比`v-if`优先级要大，如果两者在一上一下，`v-if`不起作用，

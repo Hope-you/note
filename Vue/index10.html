@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.8样式绑定语法</title>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+    </style>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return { 
+                classString: 'red',
+                classObject:{red:false,green:true},
+                classArray:['red','green',{brown:false}],
+                styleString:'color:yellow;',
+                styleObject:{
+                    color:"orange",
+                    background:'yellow'
+                }
+            }
+        },
+        template: `
+        <div :class="classString">
+            hello world 
+            <demo class="green"/>
+        </div>
+
+        <div :style="styleString">
+            我样式绑定的是一个字符串
+        </div>
+        <div :style="styleObject">
+            我样式绑定的是一个对象
+        </div>
+        
+        `
+    });
+    app.component('demo',{
+        template:`
+         <div :class="$attrs.class">one</div> 
+         <div>two</div> 
+         `
+    })
+    const vm = app.mount("#root");
+</script>
+
+</html>
