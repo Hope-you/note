@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.10-2.11列表循环渲染（1-2）</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                listArray: ['dell', 'lee', 'teacher'],
+                listObject: {
+                    firstName: 'dell',
+                    lastName: 'lee',
+                    job: 'teacher'
+                },
+            }
+        },
+        methods:{
+            handleAddBtnClick(){
+                // this.listArray.push("hello")
+                // this.listArray.pop()
+                // this.listArray.shift()
+                // this.listArray.unshift('hello')
+                // this.listArray.reverse()
+                // this.listArray=['bye','world']
+                // this.listArray=['bye'].concat(['world'])
+                // this.listArray=['bye','world'].filter(item => item==='bye') //滤出元素为bye的元素
+                // this.listArray[1]='hello'
+
+                this.listObject.age=100;
+                this.listObject.sex="male";
+            }
+        },
+        template: `
+        <div>
+            <div v-for="(item,index) in listArray" :key="index">
+            {{item}}---{{index}}
+            </div>
+            
+
+            <div
+             v-for="(value,key,index) in listObject" 
+             :key="index"
+            >
+            {{value}}---{{key}}
+            </div>
+
+
+            <template
+             v-for="(value,key,index) in listObject" 
+             :key="index"
+            >
+            
+            <div v-if="key !=='lastName'">
+                {{value}}---{{key}}
+            </div>
+
+            </template>
+
+            <button @click="handleAddBtnClick" >新增</button>
+        </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+
+</html>

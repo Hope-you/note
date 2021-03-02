@@ -1,6 +1,6 @@
 ## 第一章
 ### 1.2初学编写hello world
-``` js
+``` vue
 <script>
     Vue.createApp({
         data() {
@@ -31,7 +31,7 @@
 ### 1.3编写字符串反转和内容显示隐藏
 
 > 内容显示隐藏
-``` js
+``` vue
 <script>
     Vue.createApp({
         data() {
@@ -59,7 +59,7 @@
 ---
 
 > 字符串反转
-```js
+```vue
 <script>
     Vue.createApp({
         data() {
@@ -88,7 +88,7 @@
 </script>
 ```
 ### 1-4 编写TodoList 小功能，了解循环和双向绑定
-``` js
+``` vue
 <script>
     Vue.createApp({
         data() {
@@ -134,7 +134,7 @@
 ### 1.5组件概念初探todolist组件代码拆分
 > 组件就是网页的一部分
 
-``` js
+``` vue
 <script>
   const app =   Vue.createApp({
         data() {
@@ -178,7 +178,7 @@
 ```
 > `const app = Vue.creatApp()` 创建Vue实例
 
-> ``` js
+> ``` vue
 > app.component('组件名称',{
 >      props:['组件属性1'，'组件属性2'],
 >      template:'组件内容'
@@ -191,7 +191,7 @@
 ## 第二章
 ### 2.1应用和组件的基本概念
 
-``` js
+``` vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -212,7 +212,7 @@
 ### 2.2Vue生命周期函数（1）
 > 生命周期函数: 在某一个时刻会自动执行的函数
 
-``` js
+``` vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -262,7 +262,7 @@
 - `unMounted(){}`当vue失效之后
 
 ### 2.4常用模板语法讲解(1)
-``` js
+``` vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -293,7 +293,7 @@
 
 ### 2.5常用模板语法讲解(2)
 
-``` js
+``` vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -338,7 +338,7 @@
 ### 2.6数据、方法、计算属性和侦听器
 > 在methods中最好不使用箭头函数，箭头函数指向外层函数，this指向的是window
 
-``` js
+``` vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -386,7 +386,7 @@
 - `methods:{}`只要页面重新渲染，才会重新计算
 
 ### 2.7数据、方法、计算属性和侦听器(2)
-```js
+```vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -418,7 +418,7 @@
 
 
 ### 2.8样式绑定语法
-```js
+```vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -465,7 +465,7 @@
 4. `styleObject:{color:"orange",background:'yellow'}` 绑定数据对象（常用）
 
 ### 2.9条件渲染
-```js
+```vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -495,7 +495,7 @@
 4. `v-show` 通过改变样式`style="display: none;"`来隐藏节点
 
 ### 2.10-2.11列表循环渲染（1-2）
-```js
+```vue
 <script>
     const app = Vue.createApp({
         data() {
@@ -575,3 +575,136 @@
         1. `this.listArray[1]='hello'`改变数组中具体的某个元素
 3. 更改对象的内容：`this.listObject.sex=male;`直接添加一个属性
 4. 渲染对象的时候，如果不想要渲染某个属性/字段可以用下面的`template`标签类似于一个占位符，在DOM不渲染，因为`v-for`的优先级比`v-if`优先级要大，如果两者在一上一下，`v-if`不起作用，
+
+### 2-12 2-13 事件绑定（1-2）
+```vue
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                counter: 0
+            }
+        },
+        methods: {
+            
+            handleDivClick(){
+                alert("div clicked")
+            },
+            handleBtnClick() {
+                this.counter+=1;
+            },
+            handleKeyDown(){
+                console.log("key down")
+            }
+        },
+        template: `
+        <div>
+            {{counter}}
+            <div @click="handleDivClick">
+                <button @click.stop="handleBtnClick">button</button>
+            </div>
+        </div>
+
+
+        <div>
+            <div @click.self="handleDivClick">
+                {{counter}}
+                <button @click="handleBtnClick">button</button>
+            </div>
+        </div>
+
+        <div>
+            <input @keydown.enter="handleKeyDown" />
+        </div>
+
+        <div>
+            <input @click.right="handleKeyDown" />
+        </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+```
+1. 事件修饰符
+   1. `<button @click="handleBtnClick(1,$event),handleBtnClick1()">button</button>`需要执行多个事件的时候，需要用都好隔开，斌且加上小括号
+   2. 点击事件触发的时候会向函数传递一个`event`事件对象。标签中需要写`$event`
+   3. `<button @click.stop=`如果某个节点被另外一个节点包含了，并且两个都有相同的点击事件，点击里面的节点时，同时会触发外面节点的点击事件，在里面的节点的`@click`加上`.stop`
+   4. `<button @click.self=`如果点击子元素触发了父元素的事件，可以在父元素的事件加上`.self`Vue会判断是不是子元素的事件，如果是子元素的事件就不会触发父元素的事件。
+   5. 其他修饰符：`once`只执行一次、`prevent`默认行为、`capture`、`passive`
+2. 按键修饰符`enter`、`tab`、`delte`、`backspace`、`up`、`down`、`left`、`right`
+3. 鼠标修饰符：`left`、`right`、`middle`
+4. 精确修饰符：`exact`  `@click.ctrl.exact="handle()"`按住ctrl键再点击才可以触发，如果按住了其他键是不能触发的，去掉exact就可以触发。
+### 2-14 2-15 双向绑定(1-2)
+```vue
+<script>
+    const app = Vue.createApp({
+        data(){
+            return{
+                message:[],
+                messageStr:"hello",
+                options:[{
+                    text:"A",value:"A",
+                },{
+                    
+                    text:"B",value:"B",
+                    
+                },{
+                    text:"C",value:"C",
+                }
+            ]
+            }
+        },
+        template: `
+        <div>
+            {{message}}---{{messageStr}}
+           <input v-model="message" />
+           <br>
+           <br>
+           <textarea v-model="message" />
+           <br>
+           <br>
+           jack <input type="checkbox"  v-model="message" value="jack"/>
+           dell <input type="checkbox"  v-model="message" value="dell"/>
+           lee  <input type="checkbox"  v-model="message" value="lee"/>
+           <br>
+           <br>
+           dell <input type="radio"  v-model="messageStr" value="dell"/>
+           jack <input type="radio"  v-model="messageStr" value="jack"/>
+           lee  <input type="radio"  v-model="messageStr" value="lee"/>
+           <br>
+           <br>
+           <select v-model="messageStr">
+            <option v-for="item in options" :value="item.value">{{item.text}}</option>
+           </select>
+           <br>
+           <br>
+           <input type="checkbox" 
+            v-model="messageStr" 
+            true-value="hello"
+            false-value="world"
+           />
+           <br>
+           <br>
+           <input v-model.lazy="messageStr" />
+        </div>
+
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+```
+1. `v-model`可以绑定表单上的数据，比如`input`、`textarea`、`input type="checkbox"`如果要实现多个复选框，可以绑定一个数组，而且checkbox需要给以一个value值，也就是显示在数组中的那个值。如果要是绑定radio单选按钮，一般不用绑定数组，而是绑定字符串![双向绑定](https://gitee.com/Hope-you/scratch_demo/raw/master/Pic/20210303014746.gif)
+
+2. ```vue
+   <select v-model="messageStr">
+               <option v-for="item in options" :value="item.value">{{item.text}}</option>
+              </select>
+   ```
+
+下拉框一般用for循环来渲染
+
+3. 复选框还有一个用法，设置当选中时的value值和未选中的value值。`ture-value="" false-value=""`
+4. 修饰符
+   - `v-model.lazy` 当输入框失去焦点的时候再更新数据
+   - `v-model.number`会自动改变数据的类型
+   - `v-model.trim`清除输入框前端和后端的空格，中间的空格不会去除

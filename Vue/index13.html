@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-12 2-13 事件绑定（1-2）</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                counter: 0
+            }
+        },
+        methods: {
+            
+            handleDivClick(){
+                alert("div clicked")
+            },
+            handleBtnClick() {
+                this.counter+=1;
+            },
+            handleKeyDown(){
+                console.log("key down")
+            }
+        },
+        template: `
+        <div>
+            {{counter}}
+            <div @click="handleDivClick">
+                <button @click.stop="handleBtnClick">button</button>
+            </div>
+        </div>
+
+
+        <div>
+            <div @click.self="handleDivClick">
+                {{counter}}
+                <button @click="handleBtnClick">button</button>
+            </div>
+        </div>
+
+        <div>
+            <input @keydown.enter="handleKeyDown" />
+        </div>
+
+        <div>
+            <input @click.right="handleKeyDown" />
+        </div>
+        `
+    });
+    const vm = app.mount("#root");
+</script>
+
+</html>
