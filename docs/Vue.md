@@ -715,4 +715,137 @@
 ```
 1. 组件具备复用性
 2. 组件之间的数据互不影响
-3. `app.component('组件名'，{})`定义的是全局组件，随时都可以在根节点使用，但是占用性能。
+3. `app.component('组件名'，{})`定义的是全局组件，随时都可以使用，但是占用性能。  命名规则，小写字母单词，中间用横线间隔
+4. 局部组件：定义之后需要在父组件中注册才能使用，性能比较高，使用比较麻烦。命名规则，建议大写字母开头，驼峰命名。
+``` vue
+    components: {
+            Counter,
+            'hello-world':HelloWorld,
+        },
+```
+局部组件使用时要做一个名字和组件间的映射对象，不写银蛇，Vue底层也会自动尝试做映射。
+### 3-3 组件之间传值校验
+``` vue
+<script>
+    const app = Vue.createApp({
+        data(){
+            return {
+                num:123,
+                add: (a,b)=>{
+                    alert(a+b)
+                }
+            }
+        },
+        template: `
+        <div>
+            <test content="hello world" />
+            <test :content="num" />
+            <test1 :add1="add" />
+            
+        </div>
+        `
+    });
+    app.component('test',{
+        props:['content'],//接收数据
+        template:`
+        <div>
+            {{content}}---{{typeof content}}
+        </div>
+        `
+    }),
+    app.component('test1',{
+        props:{
+            add1:Function,//数据校验
+        },
+        methods:{
+            handleClick(){
+                this.add1(4,6)
+            }
+        },
+        template:`
+        <div @click="this.handleClick">
+            {{add1(7,8)}}---{{typeof add1}}
+        </div>
+        `
+    })
+
+    app.component('test2',{
+        props:{
+            content:{
+                type:Number,//校验数据类型
+                validator:function(value){
+                    return value<1000;
+                },//校验传递的数值如果返回true则不会有提示，如果返回false会console警告
+                required:true,//校验数据是否为必要的
+                default:555//如果父组件没有传数值过来，默认值是什么，默认值可以是数值也可以是函数
+            }//额外的数据校验
+        },
+        methods:{
+            handleClick(){
+                alert(content)
+            }
+        },
+        template:`
+        <div @click="this.handleClick">
+            {{content}}---{{typeof content}}
+        </div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+```
+1. 父组件在创建子组件标签的时候通过属性传参给子组件，子组件中定义`props`属性来接收传过来的数值，
+2. 静态传参：属性前面不加`:`只能传字符串
+3. 动态传参：父组件中在传参的时候加上`:`可以传数字等。(`:`也就是`v-bind`)
+4. 数据校验：`props`用`{content:String}`来接收和校验数据，如果接收的数据不是`String`类型，console可以看到警告
+   - 可以校验 String Boolean Array Object Function Symbol(占位符)
+   - 数据有很多校验，看代码注释
+5. 传输函数：父组件可以传递函数给子组件执行
+
+### 3-4 单项数据流的理解
+``` vue
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                params: {
+                    a: 12
+                }
+            }
+        },
+        template: `
+        <div>
+            <test :content="params" />
+            <test1 :counter="params.a"/>
+        </div>
+        `
+    });
+    app.component('test', {
+        props: ['content'],//接收数据
+        template: `
+        <div>
+            <div v-for="(item,key) in content">{{item}}---{{key}}</div>
+            {{content}}
+        </div>
+        `
+    })
+
+    app.component('test1', {
+        props: ['counter'],//接收数据
+        data() {
+            return {
+                myCounter: this.counter
+            }
+        },
+        template: `
+        <div @click="myCounter+=1">
+            原始数据{{counter}}<br> 子组件数据{{myCounter}}
+        </div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+```
+1. 如果传递的数据条目比较多，那么就可以把这些数据封装成对象，然后直接传递给子组件就可以了。
+2. 父组件在传递参数的时候`<div :content-abc="变量名"></div>`子组件在`props`中接收的时候可以写成`props:[contentAbc]`,不可以写成`props:[content-abc]`这样是接收不到的。注意传递和接收的格式。
+3. 父组件传递给子组件数据的时候，子组件只能使用父组件的数据，不能修改父组件数据内容的。(单项数据流)，可以在子组件中定义data，先把传递过来的数值赋值到一个新的变量中，渲染的时候使用新的变量就可以实现间接修改数据了

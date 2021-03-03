@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-1 组件的定义及复用性，局部组件和全局组件（1）</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const Counter = {
+        data() {
+            return {
+                count: 1
+            }
+        },template:`<div @click="count +=1">{{count}}counter</div>`
+    }
+    const HelloWorld={
+        template:`<div>hello World</div>`
+    }
+    const app = Vue.createApp({
+        components: {
+            Counter,
+            'hello-world':HelloWorld,
+        },
+        template: `
+        <div>
+        <hello-world/>
+        <counter/>
+        </div>
+        `
+    });
+
+    // app.component('counter-parent', {
+    //     template: `<counter />`
+    // });
+
+    // app.component('counter', {
+    //     data() {
+    //         return {
+    //             count: 1,
+    //         }
+    //     },
+    //     template: `<div @click="count += 1">{{count}}</div>`
+    // });
+
+    const vm = app.mount("#root");
+</script>
+
+</html>

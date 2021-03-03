@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-3 组件之间传值校验</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data(){
+            return {
+                num:123,
+                add: (a,b)=>{
+                    alert(a+b)
+                }
+            }
+        },
+        template: `
+        <div>
+            <test content="hello world" />
+            <test :content="num" />
+            <test1 :add1="add" />
+            
+        </div>
+        `
+    });
+    app.component('test',{
+        props:['content'],//接收数据
+        template:`
+        <div>
+            {{content}}---{{typeof content}}
+        </div>
+        `
+    }),
+    app.component('test1',{
+        props:{
+            add1:Function,//数据校验
+        },
+        methods:{
+            handleClick(){
+                this.add1(4,6)
+            }
+        },
+        template:`
+        <div @click="this.handleClick">
+            {{add1(7,8)}}---{{typeof add1}}
+        </div>
+        `
+    })
+
+    app.component('test2',{
+        props:{
+            content:{
+                type:Number,//校验数据类型
+                validator:function(value){
+                    return value<1000;
+                },//校验传递的数值如果返回true则不会有提示，如果返回false会console警告
+                required:true,//校验数据是否为必要的
+                default:555//如果父组件没有传数值过来，默认值是什么，默认值可以是数值也可以是函数
+            }//额外的数据校验
+        },
+        methods:{
+            handleClick(){
+                alert(content)
+            }
+        },
+        template:`
+        <div @click="this.handleClick">
+            {{content}}---{{typeof content}}
+        </div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+
+</html>
