@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2-14 2-15 双向绑定(1-2)</title>
+    <title>3-1 组件的定义及复用性，局部组件和全局组件（1）</title>
     <script src="./js/vue.global.js"></script>
 </head>
 
@@ -14,57 +14,27 @@
 </body>
 <script>
     const app = Vue.createApp({
+        template:`
+        <div>
+            <counter-parent/>
+            <counter/>
+            <counter/>
+            <counter/>
+        </div>
+        `
+    });
+
+    app.component('counter-parent',{
+        template:`<counter />`
+    });
+
+    app.component('counter',{
         data(){
             return{
-                message:[],
-                messageStr:"hello",
-                options:[{
-                    text:"A",value:"A",
-                },{
-                    
-                    text:"B",value:"B",
-                    
-                },{
-                    text:"C",value:"C",
-                }
-            ]
+                count:1,
             }
         },
-        template: `
-        <div>
-            {{message}}---{{messageStr}}
-           <input v-model="message" />
-           <br>
-           <br>
-           <textarea v-model="message" />
-           <br>
-           <br>
-           jack <input type="checkbox"  v-model="message" value="jack"/>
-           dell <input type="checkbox"  v-model="message" value="dell"/>
-           lee  <input type="checkbox"  v-model="message" value="lee"/>
-           <br>
-           <br>
-           dell <input type="radio"  v-model="messageStr" value="dell"/>
-           jack <input type="radio"  v-model="messageStr" value="jack"/>
-           lee  <input type="radio"  v-model="messageStr" value="lee"/>
-           <br>
-           <br>
-           <select v-model="messageStr">
-            <option v-for="item in options" :value="item.value">{{item.text}}</option>
-           </select>
-           <br>
-           <br>
-           <input type="checkbox" 
-            v-model="messageStr" 
-            true-value="hello"
-            false-value="world"
-           />
-           <br>
-           <br>
-           <input v-model.lazy="messageStr" />
-        </div>
-
-        `
+        template:`<div @click="count += 1">{{count}}</div>`
     });
     const vm = app.mount("#root");
 </script>
