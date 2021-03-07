@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-4 单项数据流</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                params: {
+                    a: 12
+                }
+            }
+        },
+        template: `
+        <div>
+            <test :content="params" />
+            <test1 :counter="params.a"/>
+        </div>
+        `
+    });
+    app.component('test', {
+        props: ['content'],//接收数据
+        template: `
+        <div>
+            <div v-for="(item,key) in content">{{item}}---{{key}}</div>
+            {{content}}
+        </div>
+        `
+    })
+
+    app.component('test1', {
+        props: ['counter'],//接收数据
+        data() {
+            return {
+                myCounter: this.counter
+            }
+        },
+        template: `
+        <div @click="myCounter+=1">
+            原始数据{{counter}}<br> 子组件数据{{myCounter}}
+        </div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+
+</html>
