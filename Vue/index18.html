@@ -14,21 +14,21 @@
 </body>
 <script>
     const app = Vue.createApp({
-        data(){
-            return {
-                count:1
-            }
-        },
         template: `
         <div>
-        <counter />
+        <counter msg="hello" msg1="world" />
         </div>
         `
     });
 
     app.component('counter', {
+        // props:['msg'],
+        // inheritAttrs:false,//如果没有props接收，那么把这个属性改成false，也不会把传过来的数值变成属性
+        mounted(){console.log(this.$attrs.msg); },
         template: `
         <div>Counter</div>
+        <div v-bind="$attrs">Counter</div>
+        <div :msg="$attrs.msg1">Counter</div>
         `
     })
     const vm = app.mount("#root");

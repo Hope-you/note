@@ -852,10 +852,32 @@
 
 ### 3-5 Non-props属性
 ```vue
+<script>
+    const app = Vue.createApp({
+        template: `
+        <div>
+        <counter msg="hello" msg1="world" />
+        </div>
+        `
+    });
 
+    app.component('counter', {
+        // props:['msg'],
+        // inheritAttrs:false,//如果没有props接收，那么把这个属性改成false，也不会把传过来的数值变成属性
+        mounted(){console.log(this.$attrs.msg); },
+        template: `
+        <div>Counter</div>
+        <div v-bind="$attrs">Counter</div>
+        <div :msg="$attrs.msg1">Counter</div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
 ```
 1. Non-prop属性：当父组件给子组件传值的时候，如果子组件没有用`props`接收父组件的数据，就会把父组件的值作为子组件最外层的属性。可以用来传输样式
 2. inheritAttrs:false,//如果没有props接收，那么把这个属性改成false，也不会把传过来的数值变成属性
 3. 子组件有多个标签，在没有props属性的情况下也不会变成子组件的属性，在需要接受的子组件这样写`<div v-bind="$attrs">Counter</div>`就能把所有属性都接收过来
 4. 如果父组件在调用的时候有多个值，子组件只需要其中的某个数值可以这样写`<div :msg="$attrs.msg1">Counter</div>`
 5. 可以在子组件的函数中获取到这些参数。`mounted(){console.log(this.$attrs.msg); },`
+
+### 3-6 父子组件间如何通过事件传值
