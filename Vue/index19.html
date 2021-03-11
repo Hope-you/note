@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-5 Non-props属性</title>
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                counts: 1,
+                counts1: 1,
+                counts2: 1
+            }
+        },
+        methods: {
+            handleAddOne() {
+                this.counts += 1;
+            },
+            handleAdd(num) {
+                this.counts1 += num;
+            },
+            handleAdd_Object(num) {
+                this.counts2 = num
+            }
+        },
+        template: `
+        <div> 
+        <counter :count="counts" @add-one="handleAddOne" /> 
+        <counter1 :count1="counts1" @add="handleAdd" /> 
+        <counter2 :count2="counts2" @add_object="handleAdd_Object" /> 
+        </div>
+        `//监听事件用add-one
+    });
+
+    app.component('counter', {
+        props: ['count'],//变量是只读的。
+        methods: {
+            handleClick() {
+                this.$emit('addOne')//触发事件用驼峰命名
+            }
+        },
+        template: `
+        <div @click="handleClick">{{count}}</div>
+        `
+    }),
+        app.component('counter1', {
+            props: ['count1'],//变量是只读的。
+            methods: {
+                handleClick() {
+                    this.$emit('add', 3)//可以传递参数
+                    // this.$emit('add',this.counts1+3)//可以加上表达式,接受的时候也是用形参接受就ok了
+                }
+            },
+            template: `
+        <div @click="handleClick">{{count1}}</div>
+        `
+        })
+    app.component('counter2', {
+        props: ['count2'],//变量是只读的。
+        emits: { //可以使数组也可以是对象，对象可以对事件传递的数值进行校验，true则传递给父组件，反之不传。
+            add_object: (count2) => {
+                if (count2 > 0) {
+                    return true;
+                }
+                return false;
+            }
+        },
+        methods: {
+            handleClick() {
+                this.$emit('add_object', this.count2 + 5)//可以传递参数
+                // this.$emit('add',this.counts1+3)//可以加上表达式,接受的时候也是用形参接受就ok了
+            }
+        },
+        template: `
+        <div @click="handleClick">{{count2}}</div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+
+</html>

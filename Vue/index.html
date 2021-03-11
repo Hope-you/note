@@ -14,21 +14,40 @@
 </body>
 <script>
     const app = Vue.createApp({
-        data(){
+        data() {
             return {
-                count:1
+                counts: 1,
+                counts1: 1,
             }
         },
         template: `
-        <div>
-        <counter />
-        </div>
-        `
+        <counter v-model="counts" />  
+        <counter1 v-model:num="counts1" />  
+        `//通过v-model
     });
 
     app.component('counter', {
+        props: ['modelValue'],//modelValue 名称是固定的。
+        methods: {
+            handleClick() {
+                this.$emit('update:modelValue', this.modelValue + 3)//触发事件用驼峰命名
+                //update:modelValue 固定的名字
+            }
+        },
         template: `
-        <div>Counter</div>
+        <div @click="handleClick">{{modelValue}}</div>
+        `
+    })
+    app.component('counter1', {
+        props: ['num'],//改变名字需要在父组件中v-model绑定。
+        methods: {
+            handleClick() {
+                this.$emit('update:num', this.num + 5)//触发事件用驼峰命名
+                //update:modelValue 固定的名字
+            }
+        },
+        template: `
+        <div @click="handleClick">{{num}}</div>
         `
     })
     const vm = app.mount("#root");

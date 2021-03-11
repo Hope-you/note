@@ -880,4 +880,130 @@
 4. 如果父组件在调用的时候有多个值，子组件只需要其中的某个数值可以这样写`<div :msg="$attrs.msg1">Counter</div>`
 5. 可以在子组件的函数中获取到这些参数。`mounted(){console.log(this.$attrs.msg); },`
 
-### 3-6 父子组件间如何通过事件传值
+### 3-6 父子组件间如何通过事件传值1
+``` vue
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                counts: 1,
+                counts1: 1,
+                counts2: 1
+            }
+        },
+        methods: {
+            handleAddOne() {
+                this.counts += 1;
+            },
+            handleAdd(num) {
+                this.counts1 += num;
+            },
+            handleAdd_Object(num) {
+                this.counts2 = num
+            }
+        },
+        template: `
+        <div> 
+        <counter :count="counts" @add-one="handleAddOne" /> 
+        <counter1 :count1="counts1" @add="handleAdd" /> 
+        <counter2 :count2="counts2" @add_object="handleAdd_Object" /> 
+        </div>
+        `//监听事件用add-one
+    });
+
+    app.component('counter', {
+        props: ['count'],//变量是只读的。
+        methods: {
+            handleClick() {
+                this.$emit('addOne')//触发事件用驼峰命名
+            }
+        },
+        template: `
+        <div @click="handleClick">{{count}}</div>
+        `
+    }),
+        app.component('counter1', {
+            props: ['count1'],//变量是只读的。
+            methods: {
+                handleClick() {
+                    this.$emit('add', 3)//可以传递参数
+                    // this.$emit('add',this.counts1+3)//可以加上表达式,接受的时候也是用形参接受就ok了
+                }
+            },
+            template: `
+        <div @click="handleClick">{{count1}}</div>
+        `
+        })
+    app.component('counter2', {
+        props: ['count2'],//变量是只读的。
+        emits: { //可以使数组也可以是对象，对象可以对事件传递的数值进行校验，true则传递给父组件，反之不传。
+            add_object: (count2) => {
+                if (count2 > 0) {
+                    return true;
+                }
+                return false;
+            }
+        },
+        methods: {
+            handleClick() {
+                this.$emit('add_object', this.count2 + 5)//可以传递参数
+                // this.$emit('add',this.counts1+3)//可以加上表达式,接受的时候也是用形参接受就ok了
+            }
+        },
+        template: `
+        <div @click="handleClick">{{count2}}</div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+```
+1. 组件之间是单项数据流，父组件给子组件的值是不能直接修改的，子组件中的`<div @click="handleClick">{{count}}</div>`触发了`handleClick`事件，在methods中定义一个`handleClick(){ this.$emit('addOne') }`方法，让父组件取处理数据，在父组件中使用子组件的时候`<counter :count="counts" @add-one="handleAddOne" />`监听add-one事件，用`handliAddOne`方法来处理，也就是，methods中定义的。
+2. 组件之间可以传递参数。
+3. emits可以对子组件往父组件传递的参数进行校验
+
+### 3-7 父子组件间如何通过事件传值2
+``` vue
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                counts: 1,
+                counts1: 1,
+            }
+        },
+        template: `
+        <counter v-model="counts" />  
+        <counter1 v-model:num="counts1" />  
+        `//通过v-model
+    });
+
+    app.component('counter', {
+        props: ['modelValue'],//modelValue 名称是固定的。
+        methods: {
+            handleClick() {
+                this.$emit('update:modelValue', this.modelValue + 3)//触发事件用驼峰命名
+                //update:modelValue 固定的名字
+            }
+        },
+        template: `
+        <div @click="handleClick">{{modelValue}}</div>
+        `
+    })
+    app.component('counter1', {
+        props: ['num'],//改变名字需要在父组件中v-model绑定。
+        methods: {
+            handleClick() {
+                this.$emit('update:num', this.num + 5)//触发事件用驼峰命名
+                //update:modelValue 固定的名字
+            }
+        },
+        template: `
+        <div @click="handleClick">{{num}}</div>
+        `
+    })
+    const vm = app.mount("#root");
+</script>
+```
+1. 借助`v-model`来进行父子组件之间的传参，
+    - `this.$emit('update:modelValue', this.modelValue + 3)`在子组件中用这种形式来传递参数，父组件中`<counter1 v-model="counts" /> ` 来传递参数
+    - `this.$emit('update:num', this.num + 5)`子组件中自定义名字，但是在父组件中就需要`<counter1 v-model:num="counts1" />  `来接收参数
