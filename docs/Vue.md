@@ -1007,3 +1007,8 @@
 1. 借助`v-model`来进行父子组件之间的传参，
     - `this.$emit('update:modelValue', this.modelValue + 3)`在子组件中用这种形式来传递参数，父组件中`<counter1 v-model="counts" /> ` 来传递参数
     - `this.$emit('update:num', this.num + 5)`子组件中自定义名字，但是在父组件中就需要`<counter1 v-model:num="counts1" />  `来接收参数
+
+### 3-8 组件间双向绑定高级内容
+``` vue
+```
+1. 
