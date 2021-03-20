@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3-5 Non-props属性</title>
+    <title>3-8 双向绑定高级内容</title>
     <script src="./js/vue.global.js"></script>
 </head>
 
@@ -18,11 +18,14 @@
             return {
                 counts: 1,
                 counts1: 1,
+                time:1,
+
             }
         },
         template: `
         <counter v-model="counts" />  
         <counter1 v-model:num="counts1" />  
+        <counter v-model="counts" />  
         `//通过v-model
     });
 
